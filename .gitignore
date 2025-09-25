@@ -57,6 +57,10 @@ ios/Flutter/Generated.xcconfig
 ios/Flutter/flutter_export_environment.sh
 ios/Runner/GeneratedPluginRegistrant.*
 
+# Flutter iOS build configs (ignore these)
+ios/Flutter/Debug.xcconfig
+ios/Flutter/Release.xcconfig
+
 # Gradle
 .gradle/
 /android/.gradle/
