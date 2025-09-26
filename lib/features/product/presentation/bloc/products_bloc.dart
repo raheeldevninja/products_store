@@ -1,8 +1,8 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:products_store/features/product/domain/entity/product.dart';
-import 'package:products_store/features/product/domain/use_cases/get_products.dart';
-import 'package:products_store/features/product/presentation/bloc/products_event.dart';
-import 'package:products_store/features/product/presentation/bloc/products_state.dart';
+import 'package:products_store/features/product/products.dart';
+
+part 'products_event.dart';
+part 'products_state.dart';
+
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
 

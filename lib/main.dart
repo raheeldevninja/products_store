@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:products_store/core/app/app_router.dart';
 import 'package:products_store/core/app/product_store_app.dart';
 import 'package:uuid/uuid.dart';
 import 'features/product/domain/entity/product.dart';
@@ -16,9 +17,11 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  final router = createRouter();
+
   //await addSampleProducts();
 
-  runApp(const ProductStoreApp());
+  runApp(ProductStoreApp(router: router));
 }
 
 
@@ -265,5 +268,5 @@ Future<void> addSampleProducts() async {
   }
 
   await batch.commit();
-  print("✅ 20 sample products added successfully!");
+  //print("✅ 20 sample products added successfully!");
 }
