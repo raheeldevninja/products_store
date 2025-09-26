@@ -10,7 +10,7 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
     super.key,
     required this.title,
     this.actions,
-    this.showBackButton = true,
+    this.showBackButton = false,
     this.isLoading = false,
   });
 

@@ -1,6 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:equatable/equatable.dart';
-import 'package:products_store/features/product/domain/entity/product.dart';
+part of 'products_bloc.dart';
 
 sealed class ProductsState extends Equatable {
 

@@ -1,14 +1,11 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:products_store/core/extension/context.dart';
 import 'package:products_store/core/ui/widgets/base_app_bar.dart';
 import 'package:products_store/core/ui/widgets/empty_layout.dart';
 import 'package:products_store/core/ui/widgets/loading_indicator.dart';
-import 'package:products_store/features/product/domain/entity/product.dart';
-import 'package:products_store/features/product/presentation/bloc/products_bloc.dart';
-import 'package:products_store/features/product/presentation/bloc/products_event.dart';
-import 'package:products_store/features/product/presentation/bloc/products_state.dart';
+import 'package:products_store/features/product/products.dart';
+
 import '../widgets/product_tile.dart';
 
 class ProductsPage extends StatefulWidget {
@@ -35,7 +32,7 @@ class _ProductsPageState extends State<ProductsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BaseAppBar(title: 'Products', showBackButton: false,),
+      appBar: BaseAppBar(title: 'Products'),
       body: BlocBuilder<ProductsBloc, ProductsState>(
         builder: (context, state) {
 

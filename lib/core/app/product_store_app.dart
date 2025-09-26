@@ -5,10 +5,12 @@ import 'package:products_store/features/product/data/data_sources/products_servi
 import 'package:products_store/features/product/data/repositories/product_repository_impl.dart';
 import 'package:products_store/features/product/domain/use_cases/get_products.dart';
 import 'package:products_store/features/product/presentation/bloc/products_bloc.dart';
-import 'package:products_store/features/product/presentation/pages/products_page.dart';
+
 
 class ProductStoreApp extends StatelessWidget {
-  const ProductStoreApp({super.key});
+  const ProductStoreApp({super.key,required this.router,});
+
+  final RouterConfig<Object> router;
 
   @override
   Widget build(BuildContext context) {
@@ -19,12 +21,12 @@ class ProductStoreApp extends StatelessWidget {
               ProductsBloc(getProducts: GetProducts(ProductRepositoryImpl(ProductsService()))),
         ),
       ],
-      child: MaterialApp(
+      child: MaterialApp.router(
         title: 'Products Store',
         debugShowCheckedModeBanner: false,
         theme: lightTheme,
         darkTheme: darkTheme,
-        home: ProductsPage(),
+        routerConfig: router,
       ),
     );
   }
