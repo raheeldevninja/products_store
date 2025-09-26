@@ -65,3 +65,4 @@ ios/Flutter/Release.xcconfig
 .gradle/
 /android/.gradle/
 /android/local.properties
+/android/build/reports/problems/problems-report.html
