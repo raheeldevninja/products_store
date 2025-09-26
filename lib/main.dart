@@ -4,6 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:products_store/core/app/app_router.dart';
 import 'package:products_store/core/app/product_store_app.dart';
 import 'package:uuid/uuid.dart';
+import 'features/auth/data/datasources/auth_remote_data_source.dart';
+import 'features/auth/data/repositories/auth_repository_impl.dart';
+import 'features/auth/domain/usecases/get_current_user.dart';
+import 'features/auth/domain/usecases/send_password_reset.dart';
+import 'features/auth/domain/usecases/sign_in.dart';
+import 'features/auth/domain/usecases/sign_out.dart';
+import 'features/auth/domain/usecases/sign_up.dart';
+import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/product/domain/entity/product.dart';
 import 'firebase_options.dart';
 
@@ -17,11 +25,28 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  final router = createRouter();
+  final remote = AuthRemoteDataSource();
+  final repo = AuthRepositoryImpl(remote);
+
+  final authBloc = AuthBloc(
+    signIn: SignIn(repo),
+    signUp: SignUp(repo),
+    sendPasswordReset: SendPasswordReset(repo),
+    signOut: SignOut(repo),
+    getCurrentUser: GetCurrentUser(repo),
+    repository: repo,
+  );
+
+  final router = createRouter(authBloc);
 
   //await addSampleProducts();
 
-  runApp(ProductStoreApp(router: router));
+  runApp(
+    ProductStoreApp(
+      router: router,
+      authBloc: authBloc,
+    ),
+  );
 }
 
 
