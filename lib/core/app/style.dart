@@ -149,7 +149,7 @@ ThemeData _getTheme({required Brightness brightness}) {
       clipBehavior: Clip.antiAlias,
       elevation: 4,
       shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
       color: colorScheme.primary,
       surfaceTintColor: Colors.transparent,
@@ -224,7 +224,7 @@ ThemeData _getTheme({required Brightness brightness}) {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ElevatedButton.styleFrom(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
         ),
         padding: buttonPadding,
         backgroundColor: colorScheme.secondary,
