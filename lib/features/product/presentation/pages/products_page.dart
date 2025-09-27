@@ -4,6 +4,7 @@ import 'package:products_store/core/extension/context.dart';
 import 'package:products_store/core/ui/widgets/base_app_bar.dart';
 import 'package:products_store/core/ui/widgets/empty_layout.dart';
 import 'package:products_store/core/ui/widgets/loading_indicator.dart';
+import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:products_store/features/product/products.dart';
 
 import '../widgets/product_tile.dart';
@@ -33,46 +34,99 @@ class _ProductsPageState extends State<ProductsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(title: 'Products'),
-      body: BlocBuilder<ProductsBloc, ProductsState>(
-        builder: (context, state) {
+      body: Column(
+        children: [
 
-          if (state is ProductsInitial || state is ProductsLoadInProgress) {
-            return LoadingIndicator();
-          }
-          else if (state is ProductsLoadFailure) {
-            return ErrorWidget(state.error);
-          }
-          else if(state is ProductsLoadSuccess) {
-            final products = state.products;
+          BlocBuilder<AuthBloc, AuthState>(
+            builder: (context, state) {
 
-            if (products.isEmpty) {
-              return EmptyLayout('No products yet');
-            }
+              if (state is AuthAuthenticated) {
 
-            return RefreshIndicator(
-                color: Colors.black,
-                onRefresh: () async {
-                  _productsBloc.add(const ProductsFetched(isRefresh: true));
-                },
-                child: ListView.separated(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.all(12),
-                  itemBuilder: (context, index) {
-                    if (index >= products.length) {
-                      return LoadingIndicator();
-                    }
-                    final product = products[index];
-                    return ProductTile(product: product, onAddToCart: () => _onAddToCart(product));
-                  },
-                  separatorBuilder: (_, __) => const SizedBox(height: 10),
-                  itemCount: state.hasReachedMax ? products.length : products.length + 1,
-                ),
-            );
-          }
+                final user = state.user;
+                final initials = _getInitials(user.name);
 
-          return const SizedBox.shrink();
+                return Container(
+                  padding: const EdgeInsets.all(16),
+                  color: Colors.grey.shade100,
+                  child: Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 24,
+                        backgroundColor: Colors.black,
+                        child: Text(
+                          initials,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            user.name,
+                            style: context.textTheme.bodyLarge,
+                          ),
+                          Text(
+                            user.email,
+                            style: context.textTheme.bodyMedium,
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              }
+              return const SizedBox.shrink();
+            },
+          ),
 
-        },
+          Expanded(
+            child: BlocBuilder<ProductsBloc, ProductsState>(
+              builder: (context, state) {
+
+                if (state is ProductsInitial || state is ProductsLoadInProgress) {
+                  return LoadingIndicator();
+                }
+                else if (state is ProductsLoadFailure) {
+                  return ErrorWidget(state.error);
+                }
+                else if(state is ProductsLoadSuccess) {
+                  final products = state.products;
+
+                  if (products.isEmpty) {
+                    return EmptyLayout('No products yet');
+                  }
+
+                  return RefreshIndicator(
+                      color: Colors.black,
+                      onRefresh: () async {
+                        _productsBloc.add(const ProductsFetched(isRefresh: true));
+                      },
+                      child: ListView.separated(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.all(12),
+                        itemBuilder: (context, index) {
+                          if (index >= products.length) {
+                            return LoadingIndicator();
+                          }
+                          final product = products[index];
+                          return ProductTile(product: product, onAddToCart: () => _onAddToCart(product));
+                        },
+                        separatorBuilder: (_, __) => const SizedBox(height: 10),
+                        itemCount: state.hasReachedMax ? products.length : products.length + 1,
+                      ),
+                  );
+                }
+
+                return const SizedBox.shrink();
+
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -93,6 +147,17 @@ class _ProductsPageState extends State<ProductsPage> {
   void _onAddToCart(Product product) {
     // Use the event to add to cart
     context.showSnackBarMessage(context, message: 'Added to cart', contentType: ContentType.success);
+  }
+
+  String _getInitials(String? text) {
+
+    if (text == null || text.isEmpty) return "?";
+
+    final parts = text.trim().split(" ");
+
+    if (parts.length == 1) return parts[0][0].toUpperCase();
+
+    return parts[0][0].toUpperCase() + parts[1][0].toUpperCase();
   }
 
   @override

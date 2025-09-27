@@ -12,8 +12,17 @@ class AuthRemoteDataSource {
         _firestore = firestore ?? FirebaseFirestore.instance;
 
   Stream<UserModel?> get authStateChanges {
-    return _auth.authStateChanges().map((user) {
+    return _auth.authStateChanges().asyncMap((user) async {
+
       if (user == null) return null;
+
+      // Always check FireStore first
+      final doc = await _firestore.collection('users').doc(user.uid).get();
+      if (doc.exists) {
+        return UserModel.fromFirestore(doc);
+      }
+
+      // fallback if FireStore doc missing
       return UserModel(
         uid: user.uid,
         name: user.displayName ?? '',
