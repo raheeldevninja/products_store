@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:products_store/core/ui/widgets/app_button.dart';
 import 'package:products_store/core/ui/widgets/app_dialog.dart';
 import 'package:products_store/core/ui/widgets/base_app_bar.dart';
+import 'package:products_store/core/ui/widgets/loading_indicator.dart';
 import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
 
 class AccountPage extends StatelessWidget {
@@ -13,27 +14,75 @@ class AccountPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: BaseAppBar(title: 'Account Page'),
-      body: BlocListener<AuthBloc, AuthState>(
+      body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthUnauthenticated) {
             context.go('/signIn');
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+        builder: (context, state) {
 
-              //logout button
-              AppButton(
-                onPressed: () => _handleLogout(context),
-                text: 'Logout',
+          if(state is AuthAuthenticated) {
+
+            final user = state.user;
+
+            // Build initials
+            final initials = (user.name.isNotEmpty
+                ? user.name.trim().split(' ').map((e) => e[0]).take(2).join()
+                : user.email.isNotEmpty
+                ? user.email[0]
+                : '?')
+                .toUpperCase();
+
+            return  Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+
+                  CircleAvatar(
+                    radius: 40,
+                    backgroundColor: Colors.black87,
+                    child: Text(
+                      initials,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    user.name,
+                    style: const TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    user.email,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      color: Colors.grey,
+                    ),
+                  ),
+                  const Spacer(),
+
+                  //logout button
+                  AppButton(
+                    onPressed: () => _handleLogout(context),
+                    text: 'Logout',
+                  ),
+
+                ],
               ),
+            );
+          }
 
-            ],
-          ),
-        ),
+          return LoadingIndicator();
+        },
       ),
     );
   }

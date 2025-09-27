@@ -50,6 +50,10 @@ class AuthRepositoryImpl extends AuthRepository {
     final userModel = UserModel(uid: fbUser.uid, name: name, email: email);
     await remote.createUserDocument(userModel);
 
+    // update FirebaseAuth profile (optional but useful)
+    await fbUser.updateDisplayName(name);
+    await fbUser.reload();
+
     return userModel.toEntity();
   }
 
