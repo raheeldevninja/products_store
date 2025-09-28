@@ -20,7 +20,7 @@ class CartLoadSuccess extends CartState {
   const CartLoadSuccess({
     required this.items,
     required this.total,
-    required this.outOfStock,
+    this.outOfStock = false,
   });
 
   CartLoadSuccess copyWith({

@@ -103,16 +103,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   }
 
-
-
-  // Future<void> _onRemoveRequested(CartRemoveRequested event, Emitter<CartState> emit) async {
-  //   try {
-  //     await removeFromCart.call(userId: event.userId, cartItemId: event.cartItemId);
-  //   } catch (e) {
-  //     emit(CartOperationFailure(message: e.toString()));
-  //   }
-  // }
-
   Future<void> _onRemoveRequested(
       CartRemoveRequested event,
       Emitter<CartState> emit,
@@ -126,14 +116,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       final updatedItems = currentState.items
           .where((i) => i.id != event.cartItemId)
           .toList();
-
-      // Mark target item as updating
-      // final updatedItems = currentState.items.map((i) {
-      //   if (i.id == event.cartItemId) {
-      //     return i.copyWith(isUpdating: true);
-      //   }
-      //   return i;
-      // }).toList();
 
       final total = updatedItems.fold<double>(
         0,
@@ -165,15 +147,6 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       }
     }
   }
-
-
-  // Future<void> _onQuantityUpdated(CartQuantityUpdated event, Emitter<CartState> emit) async {
-  //   try {
-  //     await updateCartQuantity.call(userId: event.userId, cartItemId: event.cartItemId, quantity: event.newQuantity);
-  //   } catch (e) {
-  //     emit(CartOperationFailure(message: e.toString()));
-  //   }
-  // }
 
   Future<void> _onQuantityUpdated(
       CartQuantityUpdated event,
@@ -227,14 +200,9 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   }
 
-
   Future<void> _onCleared(CartCleared event, Emitter<CartState> emit) async {
-    try {
-      await getCartTotal.call(userId: event.userId); // not required, just placeholder
-      await (emit as dynamic); // no-op
-    } catch (e) {
-      emit(CartOperationFailure(message: e.toString()));
-    }
+    await _sub?.cancel();
+    emit(CartLoadSuccess(items: [], total: 0));
   }
 
   @override
