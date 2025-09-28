@@ -86,3 +86,12 @@ class CartQuantityUpdated extends CartEvent {
 
 class CartCleared extends CartEvent {}
 
+class CartItemsCleared extends CartEvent {
+  final String userId;
+
+  const CartItemsCleared(this.userId);
+
+  @override
+  List<Object?> get props => [userId];
+}
+

@@ -30,8 +30,8 @@ class CartRepositoryImpl implements CartRepository {
   }
 
   @override
-  Future<void> clearCart({required String userId}) => remote.clearCart(userId: userId);
+  Future<double> getCartTotal({required String userId}) => remote.computeCartTotal(userId);
 
   @override
-  Future<double> getCartTotal({required String userId}) => remote.computeCartTotal(userId);
+  Future<void> clearCartItems({required String userId}) => remote.clearCartItems(userId: userId);
 }

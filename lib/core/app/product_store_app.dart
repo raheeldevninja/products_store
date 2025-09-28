@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:products_store/core/app/style.dart';
 import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:products_store/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:products_store/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:products_store/features/home/home.dart';
 import 'package:products_store/features/product/data/data_sources/products_service.dart';
 import 'package:products_store/features/product/data/repositories/product_repository_impl.dart';
@@ -9,11 +10,19 @@ import 'package:products_store/features/product/domain/use_cases/get_products.da
 import 'package:products_store/features/product/presentation/bloc/products_bloc.dart';
 
 class ProductStoreApp extends StatelessWidget {
-  const ProductStoreApp({super.key,required this.router, required this.authBloc, required this.cartBloc});
+
+  const ProductStoreApp({
+    super.key,
+    required this.router,
+    required this.authBloc,
+    required this.cartBloc,
+    required this.checkoutBloc,
+  });
 
   final RouterConfig<Object> router;
   final AuthBloc authBloc;
   final CartBloc cartBloc;
+  final CheckoutBloc checkoutBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +37,7 @@ class ProductStoreApp extends StatelessWidget {
           create: (_) => HomeBloc(),
         ),
         BlocProvider(create: (_) => cartBloc),
+        BlocProvider(create: (_) => checkoutBloc),
       ],
       child: BlocListener<AuthBloc, AuthState>(
         listener: (context, state) {

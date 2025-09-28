@@ -1,4 +1,5 @@
 import 'package:products_store/features/cart/cart.dart';
+import 'package:products_store/features/cart/domain/usecases/clear_cart_items.dart';
 
 part 'cart_event.dart';
 part 'cart_state.dart';
@@ -9,6 +10,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   final RemoveFromCart removeFromCart;
   final UpdateCartQuantity updateCartQuantity;
   final GetCartTotal getCartTotal;
+  final ClearCartItems clearCartItems;
 
   StreamSubscription<List<CartItem>>? _sub;
 
@@ -18,6 +20,8 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     required this.removeFromCart,
     required this.updateCartQuantity,
     required this.getCartTotal,
+    required this.clearCartItems,
+
   }) : super(CartInitial()) {
     on<CartStarted>(_onStarted);
     on<CartAddRequested>(_onAddRequested);
@@ -25,6 +29,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
     on<CartQuantityUpdated>(_onQuantityUpdated);
     on<CartCleared>(_onCleared);
     on<CartItemsUpdated>(_onItemsUpdated);
+    on<CartItemsCleared>(_onCartItemsCleared);
   }
 
   Future<void> _onStarted(CartStarted event, Emitter<CartState> emit) async {
@@ -203,6 +208,19 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Future<void> _onCleared(CartCleared event, Emitter<CartState> emit) async {
     await _sub?.cancel();
     emit(CartLoadSuccess(items: [], total: 0));
+  }
+
+  Future<void> _onCartItemsCleared(CartItemsCleared event, Emitter<CartState> emit) async {
+
+    try {
+
+      await clearCartItems.call(userId: event.userId);
+      emit(const CartLoadSuccess(items: [], total: 0, outOfStock: false));
+
+    } catch (e) {
+      emit(CartOperationFailure(message: e.toString()));
+    }
+
   }
 
   @override

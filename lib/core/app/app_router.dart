@@ -1,4 +1,3 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:products_store/core/app/go_router_refresh_stream.dart';
 import 'package:products_store/features/account/presentation/pages/account_page.dart';
@@ -7,6 +6,10 @@ import 'package:products_store/features/auth/presentation/pages/forgot_password_
 import 'package:products_store/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:products_store/features/auth/presentation/pages/sign_up_page.dart';
 import 'package:products_store/features/cart/presentation/pages/cart_page.dart';
+import 'package:products_store/features/checkout/checkouts.dart';
+import 'package:products_store/features/checkout/data/data_sources/checkout_remote_data_source.dart';
+import 'package:products_store/features/checkout/data/repositories/checkout_repository_impl.dart';
+import 'package:products_store/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:products_store/features/home/presentation/bloc/home_bloc.dart';
 import 'package:products_store/features/home/presentation/pages/home_screen.dart';
 import 'package:products_store/features/product/presentation/pages/products_page.dart';
@@ -68,6 +71,21 @@ GoRouter createRouter(AuthBloc authBloc) {
           ),
         ],
       ),
+      GoRoute(
+        path: '/checkout',
+        builder: (context, state) => BlocProvider(
+
+          create: (_) => CheckoutBloc(
+              createCheckout: CreateCheckout(CheckoutRepositoryImpl(CheckoutRemoteDataSource())),
+              confirmCheckout: ConfirmCheckout(CheckoutRepositoryImpl(CheckoutRemoteDataSource())),
+              cancelCheckout: CancelCheckout(CheckoutRepositoryImpl(CheckoutRemoteDataSource())),
+              getUserCheckouts: GetUserCheckouts(CheckoutRepositoryImpl(CheckoutRemoteDataSource())),
+          ),
+
+            child: const CheckoutPage(),
+          ),
+        ),
+
     ],
   );
 }

@@ -173,7 +173,7 @@ class CartRemoteDataSource {
     });
   }
 
-  Future<void> clearCart({required String userId}) async {
+  Future<void> clearCartItems({required String userId}) async {
 
     final cartCollection = _userCartRef(userId);
 
