@@ -88,8 +88,8 @@ class _CartPageState extends State<CartPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Total', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                          Text('\$${state.total.toStringAsFixed(2)}', style: const TextStyle(fontSize: 18)),
+                          Text('Total', style: context.textTheme.titleLarge),
+                          Text('\$${state.total.toStringAsFixed(2)}', style: context.textTheme.bodyLarge!.copyWith(fontSize: 18)),
                         ],
                       ),
                       const SizedBox(height: 12),
