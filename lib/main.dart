@@ -3,6 +3,15 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:products_store/core/app/app_router.dart';
 import 'package:products_store/core/app/product_store_app.dart';
+import 'package:products_store/features/cart/data/data_sources/cart_remote_data_source.dart';
+import 'package:products_store/features/cart/data/repositories/cart_repository_impl.dart';
+import 'package:products_store/features/cart/domain/usecases/add_to_cart.dart';
+import 'package:products_store/features/cart/domain/usecases/get_cart_items.dart';
+import 'package:products_store/features/cart/domain/usecases/get_cart_total.dart';
+import 'package:products_store/features/cart/domain/usecases/remove_from_cart.dart';
+import 'package:products_store/features/cart/domain/usecases/update_cart_quantity.dart';
+import 'package:products_store/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:products_store/features/product/data/data_sources/products_service.dart';
 import 'package:uuid/uuid.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
 import 'features/auth/data/repositories/auth_repository_impl.dart';
@@ -37,6 +46,26 @@ void main() async {
     repository: repo,
   );
 
+
+  //cart
+  final productsService = ProductsService(); // existing
+  final cartRemote = CartRemoteDataSource(productsService: productsService);
+  final cartRepo = CartRepositoryImpl(cartRemote);
+
+  final getCartItems = GetCartItems(cartRepo);
+  final addToCart = AddToCart(cartRepo);
+  final removeFromCart = RemoveFromCart(cartRepo);
+  final updateCartQuantity = UpdateCartQuantity(cartRepo);
+  final getCartTotal = GetCartTotal(cartRepo);
+
+  final cartBloc = CartBloc(
+    getCartItems: getCartItems,
+    addToCart: addToCart,
+    removeFromCart: removeFromCart,
+    updateCartQuantity: updateCartQuantity,
+    getCartTotal: getCartTotal,
+  );
+
   final router = createRouter(authBloc);
 
   //await addSampleProducts();
@@ -45,6 +74,7 @@ void main() async {
     ProductStoreApp(
       router: router,
       authBloc: authBloc,
+      cartBloc: cartBloc,
     ),
   );
 }
