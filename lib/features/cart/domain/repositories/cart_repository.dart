@@ -15,7 +15,7 @@ abstract class CartRepository {
   Future<void> updateCartItemQuantity({required String userId, required String cartItemId, required int quantity});
 
   /// Clear all cart items for user
-  Future<void> clearCart({required String userId});
+  Future<void> clearCartItems({required String userId});
 
   /// Compute cart total for user (can be implemented by summing stream items)
   Future<double> getCartTotal({required String userId});

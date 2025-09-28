@@ -6,11 +6,19 @@ import 'package:products_store/core/app/product_store_app.dart';
 import 'package:products_store/features/cart/data/data_sources/cart_remote_data_source.dart';
 import 'package:products_store/features/cart/data/repositories/cart_repository_impl.dart';
 import 'package:products_store/features/cart/domain/usecases/add_to_cart.dart';
+import 'package:products_store/features/cart/domain/usecases/clear_cart_items.dart';
 import 'package:products_store/features/cart/domain/usecases/get_cart_items.dart';
 import 'package:products_store/features/cart/domain/usecases/get_cart_total.dart';
 import 'package:products_store/features/cart/domain/usecases/remove_from_cart.dart';
 import 'package:products_store/features/cart/domain/usecases/update_cart_quantity.dart';
 import 'package:products_store/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:products_store/features/checkout/data/data_sources/checkout_remote_data_source.dart';
+import 'package:products_store/features/checkout/data/repositories/checkout_repository_impl.dart';
+import 'package:products_store/features/checkout/domain/usecases/cancel_checkout.dart';
+import 'package:products_store/features/checkout/domain/usecases/confirm_checkout.dart';
+import 'package:products_store/features/checkout/domain/usecases/create_checkout.dart';
+import 'package:products_store/features/checkout/domain/usecases/get_user_checkouts.dart';
+import 'package:products_store/features/checkout/presentation/bloc/checkout_bloc.dart';
 import 'package:products_store/features/product/data/data_sources/products_service.dart';
 import 'package:uuid/uuid.dart';
 import 'features/auth/data/datasources/auth_remote_data_source.dart';
@@ -57,6 +65,7 @@ void main() async {
   final removeFromCart = RemoveFromCart(cartRepo);
   final updateCartQuantity = UpdateCartQuantity(cartRepo);
   final getCartTotal = GetCartTotal(cartRepo);
+  final clearCartItems = ClearCartItems(cartRepo);
 
   final cartBloc = CartBloc(
     getCartItems: getCartItems,
@@ -64,7 +73,20 @@ void main() async {
     removeFromCart: removeFromCart,
     updateCartQuantity: updateCartQuantity,
     getCartTotal: getCartTotal,
+    clearCartItems: clearCartItems,
   );
+
+  //checkout
+  final checkoutRemote = CheckoutRemoteDataSource();
+  final checkoutRepo = CheckoutRepositoryImpl(checkoutRemote);
+
+  final checkoutBloc = CheckoutBloc(
+    createCheckout: CreateCheckout(checkoutRepo),
+    confirmCheckout: ConfirmCheckout(checkoutRepo),
+    cancelCheckout: CancelCheckout(checkoutRepo),
+    getUserCheckouts: GetUserCheckouts(checkoutRepo),
+  );
+
 
   final router = createRouter(authBloc);
 
@@ -75,6 +97,7 @@ void main() async {
       router: router,
       authBloc: authBloc,
       cartBloc: cartBloc,
+      checkoutBloc: checkoutBloc,
     ),
   );
 }
