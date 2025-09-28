@@ -5,6 +5,7 @@ import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:products_store/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:products_store/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:products_store/features/auth/presentation/pages/sign_up_page.dart';
+import 'package:products_store/features/auth/presentation/pages/splash_page.dart';
 import 'package:products_store/features/cart/presentation/pages/cart_page.dart';
 import 'package:products_store/features/checkout/checkouts.dart';
 import 'package:products_store/features/checkout/data/data_sources/checkout_remote_data_source.dart';
@@ -21,18 +22,28 @@ GoRouter createRouter(AuthBloc authBloc) {
     redirect: (context, state) {
       final authState = authBloc.state;
 
-      if (authState is AuthAuthenticated) {
-        if (state.fullPath == '/signIn' || state.fullPath == '/signUp') {
-
-          // Set the initial tab to Home when redirecting to /home
-          context.read<HomeBloc>().add(const TabChangedEvent(index: 0));
-
-          return '/home';
-        }
+      // While still initializing, stay on splash
+      if (authState is AuthInitial) {
+        return state.fullPath == '/splash' ? null : '/splash';
       }
 
-      if (authState is AuthUnauthenticated || authState is AuthInitial) {
-        if (state.fullPath != '/signIn' && state.fullPath != '/signUp' && state.fullPath != '/forgot-password') {
+      // Authenticated → go home
+      if (authState is AuthAuthenticated) {
+        if (state.fullPath == '/signIn' ||
+            state.fullPath == '/signUp' ||
+            state.fullPath == '/forgot-password' ||
+            state.fullPath == '/splash') {
+          context.read<HomeBloc>().add(const TabChangedEvent(index: 0));
+          return '/home';
+        }
+        return null; // allow current route
+      }
+
+      // Unauthenticated → force to sign in
+      if (authState is AuthUnauthenticated) {
+        if (state.fullPath != '/signIn' &&
+            state.fullPath != '/signUp' &&
+            state.fullPath != '/forgot-password') {
           return '/signIn';
         }
       }
@@ -40,6 +51,10 @@ GoRouter createRouter(AuthBloc authBloc) {
       return null;
     },
     routes: [
+      GoRoute(
+        path: '/splash',
+        builder: (context, state) => const SplashPage(),
+      ),
       GoRoute(
         path: '/signIn',
         builder: (context, state) => const SignInPage(),

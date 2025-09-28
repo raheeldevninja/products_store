@@ -59,4 +59,15 @@ class AuthRemoteDataSource {
     return UserModel.fromFirestore(doc);
   }
 
+  // in AuthRemoteDataSource (data layer)
+  Future<void> saveFcmToken(String uid, String token) {
+    final doc = _firestore.collection('users').doc(uid);
+    return doc.set({'fcmTokens': FieldValue.arrayUnion([token])}, SetOptions(merge: true));
+  }
+
+  Future<void> removeFcmToken(String uid, String token) {
+    final doc = _firestore.collection('users').doc(uid);
+    return doc.set({'fcmTokens': FieldValue.arrayRemove([token])}, SetOptions(merge: true));
+  }
+
 }
