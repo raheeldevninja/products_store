@@ -5,6 +5,7 @@ import 'package:products_store/core/ui/widgets/base_app_bar.dart';
 import 'package:products_store/core/ui/widgets/empty_layout.dart';
 import 'package:products_store/core/ui/widgets/loading_indicator.dart';
 import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:products_store/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:products_store/features/product/products.dart';
 
 import '../widgets/product_tile.dart';
@@ -145,6 +146,29 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   void _onAddToCart(Product product) {
+
+    final authState = context.read<AuthBloc>().state;
+
+    if (authState is! AuthAuthenticated) {
+      context.showSnackBarMessage(context, message: 'You must be logged in to add items to cart', contentType: ContentType.failure);
+      return;
+    }
+
+    final userId = authState.user.uid;
+
+    context.read<CartBloc>().add(
+        CartAddRequested(
+          userId: userId,
+          productId: product.id,
+          name: product.name,
+          price: product.price,
+          currency: product.currency,
+          imageUrl: product.imageUrl,
+          quantity: 1,
+        ),
+    );
+
+
     // Use the event to add to cart
     context.showSnackBarMessage(context, message: 'Added to cart', contentType: ContentType.success);
   }
