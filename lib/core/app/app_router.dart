@@ -13,6 +13,8 @@ import 'package:products_store/features/checkout/data/repositories/checkout_repo
 import 'package:products_store/features/checkout/presentation/pages/checkout_page.dart';
 import 'package:products_store/features/home/presentation/bloc/home_bloc.dart';
 import 'package:products_store/features/home/presentation/pages/home_screen.dart';
+import 'package:products_store/features/product/domain/entity/product.dart';
+import 'package:products_store/features/product/presentation/pages/product_details_page.dart';
 import 'package:products_store/features/product/presentation/pages/products_page.dart';
 
 GoRouter createRouter(AuthBloc authBloc) {
@@ -85,6 +87,13 @@ GoRouter createRouter(AuthBloc authBloc) {
             builder: (context, state) => const AccountPage(),
           ),
         ],
+      ),
+      GoRoute(
+        path: '/product-details',
+        builder: (context, state) {
+          final product = state.extra as Product;
+          return ProductDetailsPage(product: product);
+        },
       ),
       GoRoute(
         path: '/checkout',

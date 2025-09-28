@@ -1,5 +1,6 @@
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:products_store/core/extension/context.dart';
 import 'package:products_store/core/ui/widgets/base_app_bar.dart';
 import 'package:products_store/core/ui/widgets/empty_layout.dart';
@@ -11,7 +12,6 @@ import 'package:products_store/features/product/products.dart';
 import '../widgets/product_tile.dart';
 
 class ProductsPage extends StatefulWidget {
-
   const ProductsPage({super.key});
 
   @override
@@ -19,7 +19,6 @@ class ProductsPage extends StatefulWidget {
 }
 
 class _ProductsPageState extends State<ProductsPage> {
-
   final _scrollController = ScrollController();
   late ProductsBloc _productsBloc;
 
@@ -37,12 +36,9 @@ class _ProductsPageState extends State<ProductsPage> {
       appBar: BaseAppBar(title: 'Products'),
       body: Column(
         children: [
-
           BlocBuilder<AuthBloc, AuthState>(
             builder: (context, state) {
-
               if (state is AuthAuthenticated) {
-
                 final user = state.user;
                 final initials = _getInitials(user.name);
 
@@ -66,16 +62,10 @@ class _ProductsPageState extends State<ProductsPage> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            user.name,
-                            style: context.textTheme.bodyLarge,
-                          ),
-                          Text(
-                            user.email,
-                            style: context.textTheme.bodyMedium,
-                          ),
+                          Text(user.name, style: context.textTheme.bodyLarge),
+                          Text(user.email, style: context.textTheme.bodyMedium),
                         ],
-                      )
+                      ),
                     ],
                   ),
                 );
@@ -87,14 +77,12 @@ class _ProductsPageState extends State<ProductsPage> {
           Expanded(
             child: BlocBuilder<ProductsBloc, ProductsState>(
               builder: (context, state) {
-
-                if (state is ProductsInitial || state is ProductsLoadInProgress) {
+                if (state is ProductsInitial ||
+                    state is ProductsLoadInProgress) {
                   return LoadingIndicator();
-                }
-                else if (state is ProductsLoadFailure) {
+                } else if (state is ProductsLoadFailure) {
                   return ErrorWidget(state.error);
-                }
-                else if(state is ProductsLoadSuccess) {
+                } else if (state is ProductsLoadSuccess) {
                   final products = state.products;
 
                   if (products.isEmpty) {
@@ -102,28 +90,40 @@ class _ProductsPageState extends State<ProductsPage> {
                   }
 
                   return RefreshIndicator(
-                      color: Colors.black,
-                      onRefresh: () async {
-                        _productsBloc.add(const ProductsFetched(isRefresh: true));
+                    color: Colors.black,
+                    onRefresh: () async {
+                      _productsBloc.add(const ProductsFetched(isRefresh: true));
+                    },
+                    child: ListView.separated(
+                      controller: _scrollController,
+                      padding: const EdgeInsets.all(12),
+                      itemBuilder: (context, index) {
+                        if (index >= products.length) {
+                          return LoadingIndicator();
+                        }
+                        final product = products[index];
+                        return InkWell(
+                          onTap: () {
+                            context.push(
+                              '/product-details',
+                              extra: product, // Pass the product to details page
+                            );
+                          },
+                          child: ProductTile(
+                            product: product,
+                            onAddToCart: () => _onAddToCart(product),
+                          ),
+                        );
                       },
-                      child: ListView.separated(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.all(12),
-                        itemBuilder: (context, index) {
-                          if (index >= products.length) {
-                            return LoadingIndicator();
-                          }
-                          final product = products[index];
-                          return ProductTile(product: product, onAddToCart: () => _onAddToCart(product));
-                        },
-                        separatorBuilder: (_, __) => const SizedBox(height: 10),
-                        itemCount: state.hasReachedMax ? products.length : products.length + 1,
-                      ),
+                      separatorBuilder: (_, __) => const SizedBox(height: 10),
+                      itemCount: state.hasReachedMax
+                          ? products.length
+                          : products.length + 1,
+                    ),
                   );
                 }
 
                 return const SizedBox.shrink();
-
               },
             ),
           ),
@@ -146,35 +146,40 @@ class _ProductsPageState extends State<ProductsPage> {
   }
 
   void _onAddToCart(Product product) {
-
     final authState = context.read<AuthBloc>().state;
 
     if (authState is! AuthAuthenticated) {
-      context.showSnackBarMessage(context, message: 'You must be logged in to add items to cart', contentType: ContentType.failure);
+      context.showSnackBarMessage(
+        context,
+        message: 'You must be logged in to add items to cart',
+        contentType: ContentType.failure,
+      );
       return;
     }
 
     final userId = authState.user.uid;
 
     context.read<CartBloc>().add(
-        CartAddRequested(
-          userId: userId,
-          productId: product.id,
-          name: product.name,
-          price: product.price,
-          currency: product.currency,
-          imageUrl: product.imageUrl,
-          quantity: 1,
-        ),
+      CartAddRequested(
+        userId: userId,
+        productId: product.id,
+        name: product.name,
+        price: product.price,
+        currency: product.currency,
+        imageUrl: product.imageUrl,
+        quantity: 1,
+      ),
     );
 
-
     // Use the event to add to cart
-    context.showSnackBarMessage(context, message: 'Added to cart', contentType: ContentType.success);
+    context.showSnackBarMessage(
+      context,
+      message: 'Added to cart',
+      contentType: ContentType.success,
+    );
   }
 
   String _getInitials(String? text) {
-
     if (text == null || text.isEmpty) return "?";
 
     final parts = text.trim().split(" ");
