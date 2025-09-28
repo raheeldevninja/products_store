@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:products_store/core/app/app_router.dart';
 import 'package:products_store/core/app/product_store_app.dart';
@@ -34,6 +35,18 @@ import 'firebase_options.dart';
 
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 final _uuid = const Uuid();
+
+
+@pragma('vm:entry-point') // ensure not tree-shaken
+Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // This runs in its own isolate
+  await Firebase.initializeApp();
+  // If your Cloud Function sends a `notification` payload, the system will display it automatically
+  // For custom handling here you could log or persist message data
+  debugPrint('Background message received: ${message.messageId}');
+}
+
+
 
 void main() async {
 
@@ -91,6 +104,8 @@ void main() async {
   final router = createRouter(authBloc);
 
   //await addSampleProducts();
+
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
 
   runApp(
     ProductStoreApp(
