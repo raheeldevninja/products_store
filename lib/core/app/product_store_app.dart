@@ -29,12 +29,25 @@ class ProductStoreApp extends StatelessWidget {
         ),
         BlocProvider(create: (_) => cartBloc),
       ],
-      child: MaterialApp.router(
-        title: 'Products Store',
-        debugShowCheckedModeBanner: false,
-        theme: lightTheme,
-        darkTheme: darkTheme,
-        routerConfig: router,
+      child: BlocListener<AuthBloc, AuthState>(
+        listener: (context, state) {
+
+          final cartBloc = context.read<CartBloc>();
+
+          if (state is AuthAuthenticated) {
+            cartBloc.add(CartStarted(state.user.uid));
+          } else if (state is AuthUnauthenticated) {
+            cartBloc.add(CartCleared());
+          }
+
+        },
+        child: MaterialApp.router(
+          title: 'Products Store',
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          routerConfig: router,
+        ),
       ),
     );
   }

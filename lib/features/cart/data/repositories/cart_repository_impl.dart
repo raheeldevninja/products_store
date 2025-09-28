@@ -1,6 +1,7 @@
 import 'package:products_store/features/cart/domain/entities/cart_item.dart';
 import 'package:products_store/features/cart/domain/repositories/cart_repository.dart';
 import '../data_sources/cart_remote_data_source.dart';
+import 'package:products_store/features/cart/data/models/cart_item_model.dart';
 
 class CartRepositoryImpl implements CartRepository {
 
