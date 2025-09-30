@@ -4,9 +4,9 @@ Ecommerce app
 
 🛍️ Products Store App
 
-A Flutter e-commerce application built with Clean Architecture + BLoC state management, integrating Firebase for authentication, Firestore for data storage, FCM for push notifications, and modern Flutter practices like GoRouter, Injectable (DI), and Service Locator.
+A Flutter e-commerce application built with Clean Architecture + BLoC state management, integrating Firebase for authentication, Firestore for data storage, FCM for push notifications.
 
-This app was developed as part of a technical assignment for Simplex.
+This app was developed as part of a technical assignment for Simplex Technology Solutions.
 
 ✨ Features
 🔐 Authentication
@@ -19,7 +19,7 @@ Secure logout
 
 Fetch products from Firestore
 Product listing with pagination
-Product details page with image, description, price, and stock
+Product details page with image, description, price
 Add to Cart functionality
 
 🛒 Cart
@@ -54,11 +54,11 @@ Data → Repository Implementations + Data Sources + Model
 
 🛠️ Tech Stack
 
-Flutter (3.x)
+Flutter (3.35.1)
 Dart
 Firebase (Auth, Firestore, FCM, Cloud Functions)
 BLoC (flutter_bloc, equatable)
-GoRouter (declarative navigation)
+GoRouter
 
 
 📲 Installation
@@ -66,11 +66,11 @@ GoRouter (declarative navigation)
 Clone the repo
 
 git clone https://github.com/your-username/products_store.git
+
 cd products_store
-
 Install dependencies
-
 flutter pub get
+
 
 Setup Firebase
 
@@ -84,6 +84,7 @@ flutter build apk --release
 
 The APK will be available at:
 build/app/outputs/flutter-apk/app-release.apk
+
 
 👨‍💻 Author
 
