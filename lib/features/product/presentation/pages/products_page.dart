@@ -7,9 +7,9 @@ import 'package:products_store/core/ui/widgets/empty_layout.dart';
 import 'package:products_store/core/ui/widgets/loading_indicator.dart';
 import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:products_store/features/cart/presentation/bloc/cart_bloc.dart';
+import 'package:products_store/features/product/presentation/widgets/product_tile.dart';
 import 'package:products_store/features/product/products.dart';
 
-import '../widgets/product_tile.dart';
 
 class ProductsPage extends StatefulWidget {
   const ProductsPage({super.key});
@@ -20,13 +20,12 @@ class ProductsPage extends StatefulWidget {
 
 class _ProductsPageState extends State<ProductsPage> {
   final _scrollController = ScrollController();
-  late ProductsBloc _productsBloc;
 
   @override
   void initState() {
     super.initState();
-    _productsBloc = context.read<ProductsBloc>();
-    _productsBloc.add(const ProductsFetched());
+
+    context.read<ProductsBloc>().add(const ProductsFetched());
     _scrollController.addListener(_onScroll);
   }
 
@@ -92,7 +91,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   return RefreshIndicator(
                     color: Colors.black,
                     onRefresh: () async {
-                      _productsBloc.add(const ProductsFetched(isRefresh: true));
+                      context.read<ProductsBloc>().add(const ProductsFetched(isRefresh: true));
                     },
                     child: ListView.separated(
                       controller: _scrollController,
@@ -134,7 +133,7 @@ class _ProductsPageState extends State<ProductsPage> {
 
   void _onScroll() {
     if (_isBottom) {
-      _productsBloc.add(const ProductsFetched());
+      context.read<ProductsBloc>().add(const ProductsFetched());
     }
   }
 
