@@ -88,7 +88,7 @@ class _ProductsPageState extends State<ProductsPage> {
                   }
 
                   return RefreshIndicator(
-                    color: Colors.black,
+                    color: context.colorScheme.onSecondary,
                     onRefresh: () async {
                       context.read<ProductsBloc>().add(const ProductsFetched(isRefresh: true));
                     },
