@@ -68,8 +68,10 @@ class AccountPage extends StatelessWidget {
                       color: Colors.grey,
                     ),
                   ),
-
-                  const Divider(),
+                  const SizedBox(height: 16),
+                  const Divider(
+                    height: 0,
+                  ),
                   ListTile(
                     leading: const Icon(Icons.shopping_bag_outlined, color: Colors.black87),
                     title: const Text(
@@ -81,7 +83,23 @@ class AccountPage extends StatelessWidget {
                       context.push('/checkout');
                     },
                   ),
-                  const Divider(),
+                  const Divider(
+                    height: 0,
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.lock_outline, color: Colors.black87),
+                    title: const Text(
+                      "Change Password",
+                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                    ),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                    onTap: () {
+                      context.push('/change-password');
+                    },
+                  ),
+                  const Divider(
+                    height: 0,
+                  ),
 
                   const Spacer(),
 

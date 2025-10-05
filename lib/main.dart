@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:products_store/core/app/app_router.dart';
 import 'package:products_store/core/app/product_store_app.dart';
+import 'package:products_store/features/auth/domain/usecases/change_password.dart';
 import 'package:products_store/features/cart/data/data_sources/cart_remote_data_source.dart';
 import 'package:products_store/features/cart/data/repositories/cart_repository_impl.dart';
 import 'package:products_store/features/cart/domain/usecases/add_to_cart.dart';
@@ -64,6 +65,7 @@ void main() async {
     sendPasswordReset: SendPasswordReset(repo),
     signOut: SignOut(repo),
     getCurrentUser: GetCurrentUser(repo),
+    changePassword: ChangePassword(repo),
     repository: repo,
   );
 

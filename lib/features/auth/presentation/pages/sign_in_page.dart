@@ -42,7 +42,6 @@ class _SignInPageState extends State<SignInPage> {
 
           final isLoading = state is AuthLoading;
 
-
           return Center(
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(24),

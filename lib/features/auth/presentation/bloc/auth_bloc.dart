@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:products_store/core/common/firebase_error_mapper.dart';
 import 'package:products_store/features/auth/auth.dart';
 import 'package:products_store/features/auth/domain/repositories/auth_repository.dart';
+import 'package:products_store/features/auth/domain/usecases/change_password.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
@@ -13,6 +14,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SendPasswordReset sendPasswordReset;
   final SignOut signOut;
   final GetCurrentUser getCurrentUser;
+  final ChangePassword changePassword;
+
 
   final AuthRepository repository;
   late final StreamSubscription _authSub;
@@ -24,6 +27,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.sendPasswordReset,
     required this.signOut,
     required this.getCurrentUser,
+    required this.changePassword,
     required this.repository,
   }) : super(AuthInitial()) {
     on<AuthStatusChanged>(_onAuthStatusChanged);
@@ -32,6 +36,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignUpRequested>(_onSignUpRequested);
     on<PasswordResetRequested>(_onPasswordResetRequested);
     on<SignOutRequested>(_onSignOutRequested);
+    on<ChangePasswordRequested>(_onChangePasswordRequested);
 
     // 🔑 Listen to Firebase auth state
     _authSub = repository.authStateChanges.listen((user) {
@@ -106,6 +111,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(AuthUnauthenticated());
     } catch (e) {
       emit(AuthFailure(mapFirebaseAuthExceptionToMessage(e)));
+    }
+  }
+
+  Future<void> _onChangePasswordRequested(ChangePasswordRequested event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    try {
+      await changePassword(event.currentPassword, event.newPassword);
+      emit(AuthPasswordChanged());
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
     }
   }
 

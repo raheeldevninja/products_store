@@ -53,3 +53,13 @@ class AuthStatusChanged extends AuthEvent {
   @override
   List<Object?> get props => [user];
 }
+
+class ChangePasswordRequested extends AuthEvent {
+
+  final String currentPassword;
+  final String newPassword;
+  const ChangePasswordRequested({required this.currentPassword, required this.newPassword});
+
+  @override
+  List<Object?> get props => [currentPassword, newPassword];
+}

@@ -2,6 +2,7 @@ import 'package:go_router/go_router.dart';
 import 'package:products_store/core/app/go_router_refresh_stream.dart';
 import 'package:products_store/features/account/presentation/pages/account_page.dart';
 import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:products_store/features/auth/presentation/pages/change_password_page.dart';
 import 'package:products_store/features/auth/presentation/pages/forgot_password_page.dart';
 import 'package:products_store/features/auth/presentation/pages/sign_in_page.dart';
 import 'package:products_store/features/auth/presentation/pages/sign_up_page.dart';
@@ -109,6 +110,13 @@ GoRouter createRouter(AuthBloc authBloc) {
             child: const CheckoutPage(),
           ),
         ),
+
+      GoRoute(
+        path: '/change-password',
+        builder: (context, state) {
+          return ChangePasswordPage();
+        },
+      ),
 
     ],
   );

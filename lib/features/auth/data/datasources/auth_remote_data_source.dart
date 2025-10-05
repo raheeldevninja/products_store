@@ -43,6 +43,20 @@ class AuthRemoteDataSource {
     return _auth.sendPasswordResetEmail(email: email);
   }
 
+  Future<void> changePassword({required String currentPassword, required String newPassword}) async {
+    final firebaseUser = _auth.currentUser;
+    if (firebaseUser == null) throw Exception("No user logged in");
+
+    final cred = EmailAuthProvider.credential(
+      email: firebaseUser.email!,
+      password: currentPassword,
+    );
+
+    await firebaseUser.reauthenticateWithCredential(cred);
+
+    await firebaseUser.updatePassword(newPassword);
+  }
+
   Future<void> signOut() {
     return _auth.signOut();
   }

@@ -34,3 +34,5 @@ class AuthFailure extends AuthState {
 }
 
 class AuthPasswordReset extends AuthState {}
+
+class AuthPasswordChanged extends AuthState {}

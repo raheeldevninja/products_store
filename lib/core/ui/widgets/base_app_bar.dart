@@ -17,17 +17,20 @@ class BaseAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      automaticallyImplyLeading: false,
-      leading: showBackButton
-          ? IconButton(
-              icon: const Icon(Icons.arrow_back),
-              onPressed: isLoading
-                  ? null : () => context.pop(),
-            )
-          : null,
-      title: Text(title),
-      actions: actions,
+    return Padding(
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top),
+      child: AppBar(
+        automaticallyImplyLeading: false,
+        leading: showBackButton
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                onPressed: isLoading
+                    ? null : () => context.pop(),
+              )
+            : null,
+        title: Text(title),
+        actions: actions,
+      ),
     );
   }
 
