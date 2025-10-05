@@ -147,9 +147,6 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                 );
 
-                                //use go router to navigate
-                                //context.push('/checkout');
-
 
                               },
                               text: 'Checkout',
