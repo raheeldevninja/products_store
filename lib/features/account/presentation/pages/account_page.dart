@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:products_store/core/extension/context.dart';
+import 'package:products_store/core/theme/bloc/theme_bloc.dart';
+import 'package:products_store/core/theme/bloc/theme_event.dart';
+import 'package:products_store/core/theme/bloc/theme_state.dart';
+import 'package:products_store/core/theme/models/theme_mode_enum.dart';
 import 'package:products_store/core/ui/widgets/app_button.dart';
 import 'package:products_store/core/ui/widgets/app_dialog.dart';
 import 'package:products_store/core/ui/widgets/base_app_bar.dart';
@@ -42,30 +47,22 @@ class AccountPage extends StatelessWidget {
 
                   CircleAvatar(
                     radius: 40,
-                    backgroundColor: Colors.black87,
+                    backgroundColor: context.colorScheme.secondary,
                     child: Text(
                       initials,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: context.textTheme.headlineMedium,
                     ),
                   ),
                   const SizedBox(height: 16),
                   Text(
                     user.name,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: context.textTheme.headlineSmall,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     user.email,
-                    style: const TextStyle(
-                      fontSize: 16,
-                      color: Colors.grey,
+                    style: context.textTheme.bodyLarge!.copyWith(
+                      color: context.colorScheme.tertiaryFixedDim,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -73,12 +70,12 @@ class AccountPage extends StatelessWidget {
                     height: 0,
                   ),
                   ListTile(
-                    leading: const Icon(Icons.shopping_bag_outlined, color: Colors.black87),
-                    title: const Text(
+                    leading: const Icon(Icons.shopping_bag_outlined),
+                    title: Text(
                       "My Checkouts",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: context.textTheme.bodyLarge,
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
                       context.push('/checkout');
                     },
@@ -87,12 +84,12 @@ class AccountPage extends StatelessWidget {
                     height: 0,
                   ),
                   ListTile(
-                    leading: const Icon(Icons.lock_outline, color: Colors.black87),
-                    title: const Text(
+                    leading: const Icon(Icons.lock_outline),
+                    title: Text(
                       "Change Password",
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                      style: context.textTheme.bodyLarge,
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
                     onTap: () {
                       context.push('/change-password');
                     },
@@ -100,7 +97,28 @@ class AccountPage extends StatelessWidget {
                   const Divider(
                     height: 0,
                   ),
+                  ListTile(
+                    leading: const Icon(Icons.brightness_6),
+                    title: Text("Dark Mode", style: context.textTheme.bodyLarge,),
+                    trailing: BlocBuilder<ThemeBloc, ThemeState>(
 
+                    builder: (context, state) {
+
+                        final isDarkMode = state.themeMode == ThemeMode.dark;
+
+                        return Switch(
+                          value: state.themeMode == ThemeMode.dark,
+                          onChanged: (_) {
+                            context.read<ThemeBloc>().add(ChangeThemeEvent(isDarkMode ? AppThemeMode.light : AppThemeMode.dark));
+                          },
+                        );
+                      },
+                    ),
+                  ),
+
+                  const Divider(
+                    height: 0,
+                  ),
                   const Spacer(),
 
                   const SizedBox(height: 12),

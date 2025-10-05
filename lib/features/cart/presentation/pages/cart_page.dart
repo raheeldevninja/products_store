@@ -147,7 +147,6 @@ class _CartPageState extends State<CartPage> {
                                   ),
                                 );
 
-
                               },
                               text: 'Checkout',
                             );

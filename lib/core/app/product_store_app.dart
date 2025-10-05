@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:products_store/core/app/style.dart';
+import 'package:products_store/core/theme/bloc/theme_bloc.dart';
+import 'package:products_store/core/theme/bloc/theme_state.dart';
 import 'package:products_store/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:products_store/features/cart/presentation/bloc/cart_bloc.dart';
 import 'package:products_store/features/checkout/presentation/bloc/checkout_bloc.dart';
@@ -15,6 +17,7 @@ class ProductStoreApp extends StatelessWidget {
   const ProductStoreApp({
     super.key,
     required this.router,
+    required this.themeBloc,
     required this.authBloc,
     required this.cartBloc,
     required this.checkoutBloc,
@@ -24,11 +27,13 @@ class ProductStoreApp extends StatelessWidget {
   final AuthBloc authBloc;
   final CartBloc cartBloc;
   final CheckoutBloc checkoutBloc;
+  final ThemeBloc themeBloc;
 
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider(create: (_) => themeBloc),
         BlocProvider.value(value: authBloc),
         BlocProvider<ProductsBloc>(
           create: (_) =>
@@ -60,12 +65,17 @@ class ProductStoreApp extends StatelessWidget {
           }
 
         },
-        child: MaterialApp.router(
-          title: 'Products Store',
-          debugShowCheckedModeBanner: false,
-          theme: lightTheme,
-          darkTheme: darkTheme,
-          routerConfig: router,
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return MaterialApp.router(
+              title: 'Products Store',
+              debugShowCheckedModeBanner: false,
+              theme: lightTheme,
+              darkTheme: darkTheme,
+              themeMode: state.themeMode,
+              routerConfig: router,
+            );
+          },
         ),
       ),
     );

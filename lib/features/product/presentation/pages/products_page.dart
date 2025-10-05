@@ -43,17 +43,16 @@ class _ProductsPageState extends State<ProductsPage> {
 
                 return Container(
                   padding: const EdgeInsets.all(16),
-                  color: Colors.grey.shade100,
+                  color: context.colorScheme.surfaceContainer,
                   child: Row(
                     children: [
                       CircleAvatar(
                         radius: 24,
-                        backgroundColor: Colors.black,
+                        backgroundColor: context.colorScheme.secondary,
                         child: Text(
                           initials,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
+                          style: context.textTheme.titleLarge!.copyWith(
+                            color: context.colorScheme.onPrimaryFixed,
                           ),
                         ),
                       ),

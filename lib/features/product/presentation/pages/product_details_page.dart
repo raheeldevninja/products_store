@@ -55,7 +55,7 @@ class ProductDetailsPage extends StatelessWidget {
             // Price
             Text(
               "\$${product.price.toStringAsFixed(2)}",
-              style: context.textTheme.titleLarge?.copyWith(color: Colors.green),
+              style: context.textTheme.titleLarge?.copyWith(color: context.colorScheme.tertiary),
             ),
             const SizedBox(height: 20),
 

@@ -4,6 +4,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:products_store/core/app/app_router.dart';
 import 'package:products_store/core/app/product_store_app.dart';
+import 'package:products_store/core/theme/bloc/theme_bloc.dart';
+import 'package:products_store/core/theme/bloc/theme_event.dart';
+import 'package:products_store/core/theme/data/theme_local_data_source.dart';
+import 'package:products_store/core/theme/data/theme_repository_impl.dart';
+import 'package:products_store/core/theme/domain/usecases/get_theme_mode.dart';
+import 'package:products_store/core/theme/domain/usecases/set_theme_mode.dart';
 import 'package:products_store/features/auth/domain/usecases/change_password.dart';
 import 'package:products_store/features/cart/data/data_sources/cart_remote_data_source.dart';
 import 'package:products_store/features/cart/data/repositories/cart_repository_impl.dart';
@@ -56,6 +62,18 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+
+  //theme
+  final localDataSource = ThemeLocalDataSourceImpl();
+  final repository = ThemeRepositoryImpl(localDataSource);
+  final getThemeMode = GetThemeMode(repository);
+  final setThemeMode = SetThemeMode(repository);
+
+  final themeBloc = ThemeBloc(
+      getThemeMode, setThemeMode)..add(LoadThemeEvent(),
+  );
+
+  //auth
   final remote = AuthRemoteDataSource();
   final repo = AuthRepositoryImpl(remote);
 
@@ -112,6 +130,7 @@ void main() async {
   runApp(
     ProductStoreApp(
       router: router,
+      themeBloc: themeBloc,
       authBloc: authBloc,
       cartBloc: cartBloc,
       checkoutBloc: checkoutBloc,

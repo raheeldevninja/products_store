@@ -17,7 +17,7 @@ const _grey = Colors.grey;
 const _textFormFieldColor = Color(0xFFEBF0F5);
 
 const _darkFontColor = Colors.white;
-const _darkBackground = Color(0xFF121212);
+const _darkBackground = Color(0xFF1E1E1E);
 const _darkDivider = Colors.grey;
 final _darkPrimaryContainer = _primary.withValues(alpha: 0.2);
 final _darkSecondaryContainer = _secondary.withValues(alpha: 0.2);
@@ -151,7 +151,7 @@ ThemeData _getTheme({required Brightness brightness}) {
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
-      color: colorScheme.primary,
+      color: colorScheme.surfaceContainer,
       surfaceTintColor: Colors.transparent,
       margin: EdgeInsets.zero,
     ),
@@ -179,7 +179,7 @@ ThemeData _getTheme({required Brightness brightness}) {
       showSelectedLabels: true,
       showUnselectedLabels: true,
       backgroundColor: colorScheme.primary,
-      selectedItemColor: colorScheme.secondary,
+      selectedItemColor: colorScheme.onSurface,
       unselectedItemColor: colorScheme.tertiaryFixedDim,
     ),
     dialogTheme: DialogThemeData(
@@ -208,7 +208,7 @@ ThemeData _getTheme({required Brightness brightness}) {
       trackColor: WidgetStateProperty.resolveWith<Color>(
             (states) {
           if (states.contains(WidgetState.selected)) {
-            return colorScheme.onPrimaryFixed;
+            return colorScheme.onTertiaryContainer;
           }
           return colorScheme.onSurfaceVariant;
         },
