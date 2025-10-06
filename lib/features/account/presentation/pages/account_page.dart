@@ -50,7 +50,9 @@ class AccountPage extends StatelessWidget {
                     backgroundColor: context.colorScheme.secondary,
                     child: Text(
                       initials,
-                      style: context.textTheme.headlineMedium,
+                      style: context.textTheme.headlineMedium!.copyWith(
+                        color: context.colorScheme.onPrimaryFixed,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),
