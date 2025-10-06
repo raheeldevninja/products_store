@@ -6,8 +6,6 @@ Ecommerce app
 
 A Flutter e-commerce application built with Clean Architecture + BLoC state management, integrating Firebase for authentication, Firestore for data storage, FCM for push notifications.
 
-This app was developed as part of a technical assignment for Simplex Technology Solutions.
-
 ✨ Features
 🔐 Authentication
 
