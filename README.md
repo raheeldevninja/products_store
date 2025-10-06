@@ -7,6 +7,7 @@ Ecommerce app
 A Flutter e-commerce application built with Clean Architecture + BLoC state management, integrating Firebase for authentication, Firestore for data storage, FCM for push notifications.
 
 ✨ Features
+
 🔐 Authentication
 
 Sign Up, Sign In, Forgot Password (Firebase Auth)
@@ -46,17 +47,25 @@ Logout
 🏗️ Architecture
 
 This project follows Clean Architecture with layers:
+
 Presentation → Pages + Widgets + BLoC
+
 Domain → Entities + Use Cases + Repository
+
 Data → Repository Implementations + Data Sources + Model
 
 🛠️ Tech Stack
 
 Flutter (3.35.1)
+
 Dart
+
 Firebase (Auth, Firestore, FCM, Cloud Functions)
+
 BLoC (flutter_bloc, equatable)
+
 GoRouter
+
 
 
 📲 Installation
@@ -65,9 +74,13 @@ Clone the repo
 
 git clone https://github.com/your-username/products_store.git
 
+
 cd products_store
+
 Install dependencies
+
 flutter pub get
+
 
 
 Setup Firebase
@@ -81,6 +94,7 @@ flutter run
 flutter build apk --release
 
 The APK will be available at:
+
 build/app/outputs/flutter-apk/app-release.apk
 
 
