@@ -87,5 +87,8 @@ build/app/outputs/flutter-apk/app-release.apk
 👨‍💻 Author
 
 Developed by Raheel Khan
+
 Flutter Developer (4+ years experience)
+
 Passion for Clean Architecture & scalable apps
+
