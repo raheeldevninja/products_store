@@ -84,8 +84,8 @@ The APK will be available at:
 build/app/outputs/flutter-apk/app-release.apk
 
 
-👨‍💻 Author
 
+👨‍💻 Author
 Developed by Raheel Khan
 
 Flutter Developer (4+ years experience)
